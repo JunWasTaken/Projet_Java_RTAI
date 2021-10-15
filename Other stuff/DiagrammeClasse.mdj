@@ -10284,6 +10284,85 @@
 					"name": "Tirer"
 				}
 			]
+		},
+		{
+			"_type": "UMLCollaboration",
+			"_id": "AAAAAAF8hD1zm0bsNOU=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Collaboration1",
+			"ownedElements": [
+				{
+					"_type": "UMLInteraction",
+					"_id": "AAAAAAF8hD1znEbtVBs=",
+					"_parent": {
+						"$ref": "AAAAAAF8hD1zm0bsNOU="
+					},
+					"name": "Interaction1",
+					"ownedElements": [
+						{
+							"_type": "UMLSequenceDiagram",
+							"_id": "AAAAAAF8hD1znEbu89g=",
+							"_parent": {
+								"$ref": "AAAAAAF8hD1znEbtVBs="
+							},
+							"name": "SequenceDiagramProjet",
+							"ownedViews": [
+								{
+									"_type": "UMLFrameView",
+									"_id": "AAAAAAF8hD1znUbvrrY=",
+									"_parent": {
+										"$ref": "AAAAAAF8hD1znEbu89g="
+									},
+									"model": {
+										"$ref": "AAAAAAF8hD1znEbu89g="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF8hD1znkbw54g=",
+											"_parent": {
+												"$ref": "AAAAAAF8hD1znUbvrrY="
+											},
+											"font": "Arial;13;0",
+											"left": 32.72998046875,
+											"top": 13,
+											"width": 142.63525390625,
+											"height": 13,
+											"text": "SequenceDiagramProjet"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF8hD1zn0bxfhs=",
+											"_parent": {
+												"$ref": "AAAAAAF8hD1znUbvrrY="
+											},
+											"font": "Arial;13;1",
+											"left": 13,
+											"top": 13,
+											"width": 14.72998046875,
+											"height": 13,
+											"text": "sd"
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 8,
+									"top": 8,
+									"width": 692,
+									"height": 592,
+									"nameLabel": {
+										"$ref": "AAAAAAF8hD1znkbw54g="
+									},
+									"frameTypeLabel": {
+										"$ref": "AAAAAAF8hD1zn0bxfhs="
+									}
+								}
+							]
+						}
+					]
+				}
+			]
 		}
 	]
 }
