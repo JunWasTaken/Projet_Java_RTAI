@@ -1,13 +1,36 @@
 package controler;
 
+import java.util.Arrays;
+
 public class AmmoCrate extends Objet {
+	private Munitions[] reload;
 
 	public AmmoCrate() {
 		super();
+		this.reload = new Munitions[10];
+		for (int i=0; i<10; i++) {
+			this.reload[i] = new Munitions();
+		}
 	}
 	
 	public AmmoCrate(int posX, int posY) {
 		super(posX, posY);
+		this.reload = new Munitions[10];
+		for (int i=0; i<10; i++) {
+			this.reload[i] = new Munitions();
+		}
+	}
+
+	public Munitions[] getReload() {
+		return reload;
+	}
+	public void setReload(Munitions[] reload) {
+		this.reload = reload;
+	}
+
+	@Override
+	public String toString() {
+		return "AmmoCrate [reload=" + Arrays.toString(reload) + "]";
 	}
 
 	/*
@@ -22,8 +45,7 @@ public class AmmoCrate extends Objet {
 
 	@Override
 	public void onImpact(Ship joueur) {
-		// TODO Auto-generated method stub
-
+		joueur.setChargeur(this.reload);
 	}
 
 }
