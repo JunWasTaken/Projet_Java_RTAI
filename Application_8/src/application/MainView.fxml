@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="gameBody" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<AnchorPane id="gameBody" fx:id="gameAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
       <Pane fx:id="spaceBackgroundPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0">
          <children>
@@ -24,9 +24,10 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="inGamePane" maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" />
+      <Pane fx:id="gamePane" layoutX="300.0" prefHeight="700.0" prefWidth="700.0" />
       <Pane fx:id="mainPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-image: url('/img/theme_blue.png'); -fx-background-size: cover;">
          <children>
+            <Button layoutX="439.0" layoutY="103.0" mnemonicParsing="false" onAction="#removeHpLabel" prefHeight="30.0" prefWidth="119.0" text="test" />
             <ImageView fx:id="logo" fitHeight="124.0" fitWidth="698.0" layoutX="232.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/shootring.png" />

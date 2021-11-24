@@ -12,9 +12,8 @@ public class Partie {
 	Status status;
 	Difficulty difficulty;
 	
-	public Partie(int id) {
-		this.id = id;
-		setDifficulty();
+	public Partie() {
+		createNewGame();
 		
 	}
 	
@@ -26,15 +25,17 @@ public class Partie {
 		return this.id;
 	}
 	
-	
+	public void play() {
+		
+	}
 	public void sauvegarde() {
 		
 	}
 	
-
 	public void createNewGame() {
 		status = Status.LAUNCHE;
-		
+		setDifficulty();
+		PlayArea playArea = new PlayArea();
 	}
 
 	//Status
