@@ -1,15 +1,16 @@
 package controler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Ship extends Objet {
 	private int HP;
-	private Munitions[] magazine;
+	private ArrayList<Munitions> magazine;
 	
 	public Ship() {
 		super();
 		this.HP = 3;
-		this.magazine = new Munitions[10];
+		this.magazine = new ArrayList<>();
 		this.magazine = new AmmoCrate().getReload();
 	}
 
@@ -20,6 +21,10 @@ public class Ship extends Objet {
 		HP = hP;
 	}
 	public Munitions[] getChargeur() {
+		int tmp = 0;
+		
+		
+		
 		return magazine;
 	}
 	public void setChargeur(Munitions[] chargeur) {
