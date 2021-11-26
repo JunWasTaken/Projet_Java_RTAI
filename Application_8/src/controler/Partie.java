@@ -12,6 +12,8 @@ public class Partie {
 	Status status;
 	Difficulty difficulty;
 	
+	private PlayArea playArea;
+	
 	public Partie() {
 		createNewGame();
 		
@@ -35,7 +37,7 @@ public class Partie {
 	public void createNewGame() {
 		status = Status.LAUNCHE;
 		setDifficulty();
-		PlayArea playArea = new PlayArea();
+		playArea = new PlayArea();
 	}
 
 	//Status

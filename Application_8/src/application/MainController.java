@@ -109,6 +109,8 @@ public class MainController {
 	private boolean isRightKeyPressed;
 	private boolean isUpKeyPressed;
 	private boolean isDownKeyPressed;
+	private boolean isLeftRotateKeyPressed;
+	private boolean isRightRotateKeyPressed;
 	private int angle;
 
 	private boolean hasExceededLeft;
@@ -378,6 +380,7 @@ public class MainController {
 
 			@Override
 			public void handle(KeyEvent arg0) {
+				
 				if(arg0.getCode() == KeyCode.Q) {
 					isLeftKeyPressed = true;
 				}else if(arg0.getCode() == KeyCode.D) {
@@ -386,6 +389,10 @@ public class MainController {
 					isUpKeyPressed = true;
 				}else if(arg0.getCode() == KeyCode.S) {
 					isDownKeyPressed = true;
+				}else if(arg0.getCode() == KeyCode.O) {
+					isLeftRotateKeyPressed = true;
+				}else if(arg0.getCode() == KeyCode.P) {
+					isRightRotateKeyPressed = true;
 				}
 			}
 
@@ -401,6 +408,10 @@ public class MainController {
 					isUpKeyPressed = false;
 				}else if(arg0.getCode() == KeyCode.S) {
 					isDownKeyPressed = false;
+				}else if(arg0.getCode() == KeyCode.O) {
+					isLeftRotateKeyPressed =false;
+				}else if(arg0.getCode() == KeyCode.P) {
+					isRightRotateKeyPressed = false;
 				}
 
 			}
@@ -412,16 +423,6 @@ public class MainController {
 		final double centreX = gamePane.getWidth() / 2; //Coordonnée x
 		final double centreY = gamePane.getHeight() / 2; //Coordonnée y
 		double rayonGame = centreY;	
-
-
-		//test :
-//		System.out.println(rayonShip);
-//		System.out.println(rayonGame);
-//		System.out.println("LEFT "+hasExceededLeft);
-//		System.out.println("RIGHT "+hasExceededRight);
-//		System.out.println("UP "+hasExceededUp);
-//		System.out.println("DOWN "+hasExceededDown);
-		
 		
 		//Si rayon du vaisseau < à rayon du cercle on remet tout à "false" :		
 		if(rayonShip < rayonGame) {
@@ -433,11 +434,7 @@ public class MainController {
 
 		//MOVING LEFT
 		if(isLeftKeyPressed && !isRightKeyPressed) {
-			//Rotation pour test :
-			if (angle > -30) {
-				angle -= 5;
-			}
-			shipImg.setRotate(angle);
+			
 
 			/*	On verifie si la variable booléenne est false, ce qui veut dire que le vaisseau n'a pas atteint les limites du cercle,
 			*	S'il atteint la limite (en comparant son rayon par rapport à celui du cercle), on met la variable booléenne à true.
@@ -455,10 +452,6 @@ public class MainController {
 		
 		//MOVING RIGHT
 		if(!isLeftKeyPressed && isRightKeyPressed) {
-			if (angle < 30) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
 
 			if(!hasExceededRight) {
 				shipImg.setLayoutX(shipImg.getLayoutX() + distance);
@@ -470,22 +463,22 @@ public class MainController {
 			}
 		}
 //		Les deux fonctions suivantes sont à supprimer surrement, car la rotation sera génerée par la souris :
-		if(!isLeftKeyPressed && !isRightKeyPressed) {
-			if(angle > 0) {
-				angle -= 5;
-			}else if(angle < 0) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
-		}
-		if(isLeftKeyPressed && isRightKeyPressed) {
-			if(angle > 0) {
-				angle -= 5;
-			}else if(angle < 0) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
-		}
+//		if(!isLeftKeyPressed && !isRightKeyPressed) {
+//			if(angle > 0) {
+//				angle -= 5;
+//			}else if(angle < 0) {
+//				angle += 5;
+//			}
+//			shipImg.setRotate(angle);
+//		}
+//		if(isLeftKeyPressed && isRightKeyPressed) {
+//			if(angle > 0) {
+//				angle -= 5;
+//			}else if(angle < 0) {
+//				angle += 5;
+//			}
+//			shipImg.setRotate(angle);
+//		}
 
 		//MOVING UP
 		if(isUpKeyPressed && !isDownKeyPressed) {
@@ -510,6 +503,15 @@ public class MainController {
 			}	
 		}
 		
+		//SET ROTATION
+		if(isLeftRotateKeyPressed && !isRightRotateKeyPressed) {
+			angle-=1;
+			shipImg.setRotate(angle);
+		}
+		if(!isLeftRotateKeyPressed && isRightRotateKeyPressed) {
+			angle+=1;
+			shipImg.setRotate(angle);
+		}
 		gamePane.setOnMouseMoved(new EventHandler<MouseEvent>() {
 
 			@Override
