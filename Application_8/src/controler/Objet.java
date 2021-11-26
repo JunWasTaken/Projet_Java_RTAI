@@ -1,7 +1,7 @@
 package controler;
 
 public abstract class Objet {
-	private int posX, posY;
+	private double posX, posY;
 
 	public Objet() {
 		this.posX = 0; 
@@ -13,16 +13,16 @@ public abstract class Objet {
 		this.posY = posY;
 	}
 	
-	public int getPosX() {
+	public double getPosX() {
 		return posX;
 	}
-	public void setPosX(int posX) {
+	public void setPosX(double posX) {
 		this.posX = posX;
 	}
-	public int getPosY() {
+	public double getPosY() {
 		return posY;
 	}
-	public void setPosY(int posY) {
+	public void setPosY(double posY) {
 		this.posY = posY;
 	}
 	@Override

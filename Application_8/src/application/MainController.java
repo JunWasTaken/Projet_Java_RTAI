@@ -443,8 +443,9 @@ public class MainController {
 			*	S'il atteint la limite (en comparant son rayon par rapport � celui du cercle), on met la variable bool�enne � true.
 			**/
 			if(!hasExceededLeft) {
-				shipImg.setLayoutX(shipImg.getLayoutX() -distance); //Je fais avancer le vaisseau.
+				shipImg.setLayoutX(ship.getPosX() -distance); //Je fais avancer le vaisseau.
 				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosX(shipImg.getLayoutX());
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededLeft = true;
@@ -461,8 +462,9 @@ public class MainController {
 			shipImg.setRotate(angle);
 
 			if(!hasExceededRight) {
-				shipImg.setLayoutX(shipImg.getLayoutX() + distance);
+				shipImg.setLayoutX(ship.getPosX() + distance);
 				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosX(shipImg.getLayoutX());
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededRight = true;
@@ -492,6 +494,7 @@ public class MainController {
 			if(!hasExceededUp) {
 				shipImg.setLayoutY(shipImg.getLayoutY() -distance);
 				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosY(shipImg.getLayoutY());
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededUp = true;
@@ -503,6 +506,7 @@ public class MainController {
 			if(!hasExceededDown) {
 				shipImg.setLayoutY(shipImg.getLayoutY() +distance);
 				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosY(shipImg.getLayoutY());
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededDown = true;
