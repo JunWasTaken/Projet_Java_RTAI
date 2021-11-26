@@ -249,8 +249,7 @@ public class MainController {
 	 */
 	public void setScoreLabel() {
 		scoreLabel = new Label();
-		int score=1;// � supprimer...
-		scoreLabel.setText("Score : "+score);
+		scoreLabel.setText("Score : "+playerScore.getScore());
 		scoreLabel.setLayoutX(1100);
 		scoreLabel.setLayoutY(40);
 		scoreLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));

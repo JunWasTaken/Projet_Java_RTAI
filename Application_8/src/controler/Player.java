@@ -3,10 +3,10 @@ package controler;
 public class Player {
 	
 	private String nom;
-	private int score;
+	private static int score = 0;
 	
 	public Player() {
-		// TODO Auto-generated constructor stub
+		score = 0;
 	}
 	
 	public void setNom(String nom) {
@@ -22,6 +22,10 @@ public class Player {
 	}
 	public int getScore() {
 		return this.score;
+	}
+	
+	public static void increaseScore() {
+		score += 100;
 	}
 	
 }

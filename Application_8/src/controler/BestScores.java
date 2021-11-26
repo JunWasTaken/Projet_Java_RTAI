@@ -15,8 +15,8 @@ public class BestScores implements Serializable {
 		this.TableauScores = new HashMap<>();	
 	}
 	
-	public void add(String nomJoueur, int score) {
-		this.TableauScores.put(nomJoueur, (Integer) score);
+	public void add(Player joueur) {
+		this.TableauScores.put(joueur.getNom(), (Integer) joueur.getScore());
 	}
 	
 	public void save() {

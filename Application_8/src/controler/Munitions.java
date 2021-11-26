@@ -15,6 +15,7 @@ public class Munitions extends Objet {
 	}
 	
 	public void onImpact(Debris debris) {
+		Player.increaseScore();
 		debris = null;
 		System.gc();
 	}
