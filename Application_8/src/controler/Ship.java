@@ -20,16 +20,8 @@ public class Ship extends Objet {
 	public void setHP(int hP) {
 		HP = hP;
 	}
-<<<<<<< HEAD
 	public ArrayList getChargeur() {
-=======
-	public Munitions[] getChargeur() {
-		int tmp = 0;
-		
-		
-		
->>>>>>> main
-		return magazine;
+		return this.magazine;
 	}
 	public void setChargeur(ArrayList<Munitions> reload) {
 		this.magazine = reload;

@@ -21,7 +21,8 @@ public class Munitions extends Objet {
 	}
 	
 	public void onImpact(Debris debris) {
-		
+		debris = null;
+		System.gc();
 	}
 
 }

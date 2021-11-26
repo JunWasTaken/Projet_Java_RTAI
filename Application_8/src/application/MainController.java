@@ -103,7 +103,7 @@ public class MainController {
 	
 	private AnimationTimer gameTimer;
 	
-	private double rayonShip;//	Le rayon par rapport à la position du vaisseau.
+	private double rayonShip;//	Le rayon par rapport ï¿½ la position du vaisseau.
 
 	private boolean isLeftKeyPressed;
 	private boolean isRightKeyPressed;
@@ -128,7 +128,7 @@ public class MainController {
 	
 	
 	/*
-	 * 	Affichage des fenêtres (Pane) souhaitées en fonction du menu :
+	 * 	Affichage des fenï¿½tres (Pane) souhaitï¿½es en fonction du menu :
 	 */
 
 	public void setHome(Event event) {
@@ -231,7 +231,7 @@ public class MainController {
 	}
 
 	/**
-	 * Affichage du vaissau au centre de l'arène : 
+	 * Affichage du vaissau au centre de l'arï¿½ne : 
 	 */
 	public void setShip() {
 		shipImg.setFitWidth(99 / 1.4);
@@ -249,7 +249,7 @@ public class MainController {
 	 */
 	public void setScoreLabel() {
 		scoreLabel = new Label();
-		int score=1;// à supprimer...
+		int score=1;// ï¿½ supprimer...
 		scoreLabel.setText("Score : "+score);
 		scoreLabel.setLayoutX(1100);
 		scoreLabel.setLayoutY(40);
@@ -301,7 +301,7 @@ public class MainController {
 		munitionImg.setLayoutY(640);
 		mainPane.getChildren().add(munitionImg);
 
-		munitionLabel.setText("0");
+		munitionLabel.setText(String.valueOf(ship.getChargeur().size()));
 		munitionLabel.setLayoutX(170);
 		munitionLabel.setLayoutY(674);
 		munitionLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
@@ -316,7 +316,7 @@ public class MainController {
 	 * @param munitions
 	 */
 	public void changeMunitionLabel() {
-//À REVOIR...
+//ï¿½ REVOIR...
 //		String munition;
 
 //		for (int i=0; i<ship.getChargeur().length; i++) {
@@ -408,9 +408,9 @@ public class MainController {
 	}
 
 	public void moveShip() {
-		//On determine les coodronées du centre de notre cercle :		
-		final double centreX = gamePane.getWidth() / 2; //Coordonnée x
-		final double centreY = gamePane.getHeight() / 2; //Coordonnée y
+		//On determine les coodronï¿½es du centre de notre cercle :		
+		final double centreX = gamePane.getWidth() / 2; //Coordonnï¿½e x
+		final double centreY = gamePane.getHeight() / 2; //Coordonnï¿½e y
 		double rayonGame = centreY;	
 
 
@@ -423,7 +423,7 @@ public class MainController {
 //		System.out.println("DOWN "+hasExceededDown);
 		
 		
-		//Si rayon du vaisseau < à rayon du cercle on remet tout à "false" :		
+		//Si rayon du vaisseau < ï¿½ rayon du cercle on remet tout ï¿½ "false" :		
 		if(rayonShip < rayonGame) {
 			hasExceededLeft = false;
 			hasExceededRight = false;
@@ -439,8 +439,8 @@ public class MainController {
 			}
 			shipImg.setRotate(angle);
 
-			/*	On verifie si la variable booléenne est false, ce qui veut dire que le vaisseau n'a pas atteint les limites du cercle,
-			*	S'il atteint la limite (en comparant son rayon par rapport à celui du cercle), on met la variable booléenne à true.
+			/*	On verifie si la variable boolï¿½enne est false, ce qui veut dire que le vaisseau n'a pas atteint les limites du cercle,
+			*	S'il atteint la limite (en comparant son rayon par rapport ï¿½ celui du cercle), on met la variable boolï¿½enne ï¿½ true.
 			**/
 			if(!hasExceededLeft) {
 				shipImg.setLayoutX(shipImg.getLayoutX() -distance); //Je fais avancer le vaisseau.
@@ -469,7 +469,7 @@ public class MainController {
 				}else {distance = 3;}
 			}
 		}
-//		Les deux fonctions suivantes sont à supprimer surrement, car la rotation sera génerée par la souris :
+//		Les deux fonctions suivantes sont ï¿½ supprimer surrement, car la rotation sera gï¿½nerï¿½e par la souris :
 		if(!isLeftKeyPressed && !isRightKeyPressed) {
 			if(angle > 0) {
 				angle -= 5;
