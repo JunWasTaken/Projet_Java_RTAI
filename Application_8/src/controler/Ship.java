@@ -32,12 +32,6 @@ public class Ship extends Objet {
 	}
 
 	@Override
-	public void moving(int posX, int posY) {
-		super.setPosX(super.getPosX()+posX);
-		super.setPosY(super.getPosY()+posY);
-	}
-
-	@Override
 	public void onImpact(Ship joueur) {
 		//rien � mettre dans cette fonction
 	}

@@ -29,7 +29,10 @@ public abstract class Objet {
 	public String toString() {
 		return "Objet [posX=" + posX + ", posY=" + posY + "]";
 	}
-
-	public abstract void moving(int posX, int posY);
+	
+	public void moving(int posX, int posY) {
+		this.setPosX(this.getPosX()+posX);
+		this.setPosY(this.getPosY()+posY);
+	};
 	public abstract void onImpact(Ship joueur);
 }
