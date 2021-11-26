@@ -1,36 +1,37 @@
 package controler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AmmoCrate extends Objet {
-	private Munitions[] reload;
+	private ArrayList<Munitions> reload;
 
 	public AmmoCrate() {
 		super();
-		this.reload = new Munitions[10];
+		this.reload = new ArrayList<>();
 		for (int i=0; i<10; i++) {
-			this.reload[i] = new Munitions();
+			this.reload.add(new Munitions());
 		}
 	}
 	
 	public AmmoCrate(int posX, int posY) {
 		super(posX, posY);
-		this.reload = new Munitions[10];
+		this.reload = new ArrayList<>();
 		for (int i=0; i<10; i++) {
-			this.reload[i] = new Munitions();
+			this.reload.add(new Munitions());
 		}
 	}
 
-	public Munitions[] getReload() {
+	public ArrayList<Munitions> getReload() {
 		return reload;
 	}
-	public void setReload(Munitions[] reload) {
+	public void setReload(ArrayList<Munitions> reload) {
 		this.reload = reload;
 	}
 
 	@Override
 	public String toString() {
-		return "AmmoCrate [reload=" + Arrays.toString(reload) + "]";
+		return "AmmoCrate [reload=" + reload.toString() + "]";
 	}
 
 	/*

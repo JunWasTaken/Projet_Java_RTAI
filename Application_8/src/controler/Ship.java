@@ -1,15 +1,16 @@
 package controler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Ship extends Objet {
 	private int HP;
-	private Munitions[] magazine;
+	private ArrayList<Munitions> magazine;
 	
 	public Ship() {
 		super();
 		this.HP = 3;
-		this.magazine = new Munitions[10];
+		this.magazine = new ArrayList<>();
 		this.magazine = new AmmoCrate().getReload();
 	}
 
@@ -19,15 +20,15 @@ public class Ship extends Objet {
 	public void setHP(int hP) {
 		HP = hP;
 	}
-	public Munitions[] getChargeur() {
+	public ArrayList getChargeur() {
 		return magazine;
 	}
-	public void setChargeur(Munitions[] chargeur) {
-		this.magazine = chargeur;
+	public void setChargeur(ArrayList<Munitions> reload) {
+		this.magazine = reload;
 	}
 	@Override
 	public String toString() {
-		return "Ship [HP=" + HP + ", chargeur=" + Arrays.toString(magazine) + "]";
+		return "Ship [HP=" + HP + ", chargeur=" + magazine.toString() + "]";
 	}
 
 	@Override
@@ -52,14 +53,11 @@ public class Ship extends Objet {
 	}
 	
 	public Munitions tirer() {
-		Munitions ammo_tmp;
-		for (int i=9; i>=0; i++) {
-			if (this.magazine[i] != null) {
-				ammo_tmp = this.magazine[i];
-				this.magazine[i] = null;
-				return ammo_tmp;
-			}
+		try {
+			return this.magazine.remove(this.magazine.size()-1);
+		}catch (Exception e) {
+			System.err.println(e.toString());
+			return null;
 		}
-		return null;
 	}
 }
