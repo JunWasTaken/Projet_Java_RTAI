@@ -1,0 +1,26 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/*theme colors :
+ * blue : #69b3b7
+ * green : #9fb569
+ * orange : #b26d69
+ * pink : #af69aa
+ */
+ 
+
+ .buttons {
+ 	-fx-background-color : #69b3b7;
+ 	-fx-color : #000;
+ 	/*-fx-border-radius : 30px;*/
+ }
+#blueButton {
+	-fx-background-color : #69b3b7; 
+}
+#greenButton {
+	-fx-background-color : #9fb569; 
+}
+#orangeButton {
+	-fx-background-color : #b26d69; 
+}
+#pinkButton {
+	-fx-background-color : #af69aa; 
+}
