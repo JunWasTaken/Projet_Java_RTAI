@@ -1,6 +1,9 @@
 package application;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +21,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -84,6 +89,17 @@ public class MainController {
 	Button playButton;
 	@FXML
 	Button themeButton;
+	
+	@FXML
+	Pane gameOverPane;
+	@FXML
+	TextField textFieldPseudo;
+	@FXML
+	TableView tableScoreOver;
+	@FXML
+	Label labelRestart;
+	@FXML
+	Label labelMainMenu;
 
 	
 	int hpSize;
@@ -141,6 +157,7 @@ public class MainController {
 		optionsPane.setVisible(false);
 		scoresPane.setVisible(false);
 		creditsPane.setVisible(false);
+		gameOverPane.setVisible(false);
 
 	}
 	public void setStartPane() {
@@ -161,7 +178,11 @@ public class MainController {
 		homePane.setVisible(false);
 		creditsPane.setVisible(true);
 	}
-
+	public void setGameOverPane() {
+		homePane.setVisible(false);
+		gameOverPane.setVisible(true);
+	}
+	
 
 
 	/* 
@@ -224,9 +245,11 @@ public class MainController {
 			setScoreLabel();
 			setHpLabel();		
 			setMunitionsLabel();
-			setTimeLabel();		
+			setTimeLabel();
+			setTempLabel();
 			setShip(); 			
 			createGame();
+			
 
 		}
 
@@ -258,6 +281,28 @@ public class MainController {
 		scoreLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
 		mainPane.getChildren().add(scoreLabel);	
 		
+		
+	}
+	
+	/**
+	 * Affichage du label "temp" :
+	 */
+	public void setTempLabel() {	
+		new AnimationTimer(){
+  	        public void handle(long currentNanoTime)
+	        {
+	        	Date now = new Date();
+				DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				Label timeLabel = new Label();
+				timeLabel.setText(df.format(now).toString());
+				timeLabel.setLayoutX(950);
+				timeLabel.setLayoutY(650);
+				timeLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
+				mainPane.getChildren().add(timeLabel); //A finir
+				
+	        }
+	    }.start();
+			
 		
 	}
 
