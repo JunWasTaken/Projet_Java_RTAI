@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import controler.Munitions;
 import controler.Partie;
@@ -14,6 +16,7 @@ import controler.Ship;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,6 +35,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Hassane_lm
@@ -287,22 +292,42 @@ public class MainController {
 	/**
 	 * Affichage du label "temp" :
 	 */
-	public void setTempLabel() {	
-		new AnimationTimer(){
-  	        public void handle(long currentNanoTime)
-	        {
-	        	Date now = new Date();
-				DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-				Label timeLabel = new Label();
-				timeLabel.setText(df.format(now).toString());
-				timeLabel.setLayoutX(950);
-				timeLabel.setLayoutY(650);
-				timeLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
-				mainPane.getChildren().add(timeLabel); //A finir
-				
-	        }
-	    }.start();
+	private static int m2, m1, s2, s1;
+	public void setTempLabel() {		
+	       
+		Label timeLabel = new Label();
+		timeLabel.setText("00:00");
+		timeLabel.setLayoutX(1125);
+		timeLabel.setLayoutY(650);
+		timeLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 50));
+		mainPane.getChildren().add(timeLabel); //A finir
+		m2 = 0; m1 = 0; s2 = 0; s1 = 0;	
+		
+		Timer chrono = new Timer();
+		chrono.schedule(new TimerTask() {
 			
+			@Override
+			public void run() {
+				
+				s1++;
+				if(s1 == 10) {
+					s1 = 0;
+					s2++;	
+				}
+				if(s2 == 6) {
+					s2 = 0;
+					m1++;
+				}
+				if(m1 == 10) {
+					m1 = 0;
+					m2++;	
+				}
+
+				Platform.runLater (() -> timeLabel.setText(m2 + "" + m1 + ":" + s2 + "" + s1));
+				
+			}
+			
+		}, 1000, 1000);
 		
 	}
 
