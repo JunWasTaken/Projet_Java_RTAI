@@ -6,7 +6,7 @@ public class Debris extends Objet {
 	}
 
 	@Override
-	public void moving(int posX, int posY) {
+	public void moving(double posX, double posY) {
 	}
 
 	@Override

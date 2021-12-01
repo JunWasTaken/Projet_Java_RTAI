@@ -14,6 +14,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,7 +25,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -45,6 +48,8 @@ public class MainController {
 	@FXML
 	ImageView arrawBack;
 
+	@FXML
+	AnchorPane gameAnchorPane;
 	@FXML
 	Pane mainPane;
 	@FXML
@@ -78,38 +83,53 @@ public class MainController {
 	RadioButton blueRadioButton;
 
 	RadioButton radioButton;
-	List<RadioButton> buttonList;
+	private List<RadioButton> buttonList;
 
 	@FXML
 	Button playButton;
 	@FXML
 	Button themeButton;
 
-	
+
 	int hpSize;
 	ImageView hpTable[]; //Tableau permettant l'affichage des images de points d'hp.
 
-	
-	
-	
+
+
+
 	Label munitionLabel;
 	Label scoreLabel;
-	Player playerScore;
-	
+	controler.Player playerScore;
+
 	Partie partie;
+
+	controler.Munitions munition;
+	ImageView munitionImg;
+	private double angleMunition;
 
 	ImageView shipImg;
 	public Ship ship;
-	
+	private double centerShipX;
+	private double centerShipY;
+
 	private AnimationTimer gameTimer;
-	
+
 	private double rayonShip;//	Le rayon par rapport à la position du vaisseau.
+	private double rayonGame;
+	private double rayonMunition;
+	private double centreX;
+	private double centreY;
 
 	private boolean isLeftKeyPressed;
 	private boolean isRightKeyPressed;
 	private boolean isUpKeyPressed;
 	private boolean isDownKeyPressed;
-	private int angle;
+	private double angle;
+	private double mouseCoordX;//Coordonnées par rapport au centre du vaisseau.
+	private double mouseCoordY;//Idem.
+
+	private double mouseX;//Coordonnées par rapport à la fenetre.
+	private double mouseY;//Idem.
 
 	private boolean hasExceededLeft;
 	private boolean hasExceededRight;
@@ -118,15 +138,20 @@ public class MainController {
 
 	private int distance;
 
-	
-	
+	private long lastTimeShot;
+
+	private List<Munitions> munitions = new ArrayList<>();;
+
+
+
+
 
 	/******************************************
 	 *********  I. INTERFACE MENU  ************
 	 */
-	
-	
-	
+
+
+
 	/*
 	 * 	Affichage des fenêtres (Pane) souhaitées en fonction du menu :
 	 */
@@ -205,42 +230,23 @@ public class MainController {
 	}
 
 	/**
-	 * 
-	 */
-	public void play() {
-		if(shipImg != null) {
-			//		spaceBackgroundPane.setVisible(false);
-			partie = new controler.Partie();
-			playerScore = new controler.Player();
-			
-			startPane.setVisible(false);
-			TranslateTransition transition = new TranslateTransition();
-			transition.setDuration(Duration.seconds(0.4));
-			transition.setNode(logo);
-			transition.setByX(-1000);
-			transition.play();
-			setScoreLabel();
-			setHpLabel();		
-			setMunitionsLabel();
-			setTimeLabel();		
-			setShip(); 			
-			createGame();
-
-		}
-
-	}
-
-	/**
 	 * Affichage du vaissau au centre de l'arène : 
 	 */
 	public void setShip() {
+		ship = new Ship();
+
 		shipImg.setFitWidth(99 / 1.4);
 		shipImg.setFitHeight(75 / 1.4);
-		shipImg.setLayoutX((gamePane.getWidth() / 2));
-		shipImg.setLayoutY((gamePane.getHeight() / 2));
+		centerShipX = shipImg.getFitWidth() / 2;
+		centerShipY = shipImg.getFitHeight() / 2;
+
+		ship.setPosX((gamePane.getWidth() / 2) - centerShipX);
+		ship.setPosY((gamePane.getWidth() / 2) - centerShipY);
+
+		shipImg.setLayoutX(ship.getPosX());
+		shipImg.setLayoutY(ship.getPosY());
 		gamePane.getChildren().add(shipImg);
 
-		ship = new Ship();
 	}
 
 
@@ -255,8 +261,8 @@ public class MainController {
 		scoreLabel.setLayoutY(40);
 		scoreLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
 		mainPane.getChildren().add(scoreLabel);	
-		
-		
+
+
 	}
 
 	/**
@@ -311,26 +317,24 @@ public class MainController {
 	public void setTimeLabel() {
 
 	}
-	
+
 	/**
 	 * @param munitions
 	 */
 	public void changeMunitionLabel() {
-//À REVOIR...
-//		String munition;
-
-//		for (int i=0; i<ship.getChargeur().length; i++) {
-//			if(ship.getChargeur()[i] != null) {
-//				munition = 
-//			}
-//		}
-//		munitionLabel.setText((ship.getChargeur().length).toString());
+		int compt=0;
+		for(Munitions munition : ship.getChargeur()) {
+			if(munition != null) {
+				compt++;
+			}
+		}
+		munitionLabel.setText(String.valueOf(compt));
 	}
 
 	public void changeScoreLabel() {
 		scoreLabel.setText("Score : "+String.valueOf(playerScore.getScore()));
 	}
-	
+
 
 	/**
 	 * @param event
@@ -357,6 +361,38 @@ public class MainController {
 
 
 
+	/**
+	 * 
+	 */
+	public void play() {
+		if(shipImg != null) {
+			//		spaceBackgroundPane.setVisible(false);
+			partie = new controler.Partie();
+			playerScore = new controler.Player();
+
+			startPane.setVisible(false);
+			TranslateTransition transition = new TranslateTransition();
+			transition.setDuration(Duration.seconds(0.4));
+			transition.setNode(logo);
+			transition.setByX(-1000);
+			transition.play();
+			setScoreLabel();
+			setHpLabel();		
+			setMunitionsLabel();
+			setTimeLabel();	
+
+			centreX = gamePane.getWidth() / 2; //Coordonnée x du point central
+			centreY = gamePane.getHeight() / 2; //Coordonnée y
+			rayonGame = centreY;	
+			
+			setShip();
+			createGame();
+
+			
+		}
+
+	}
+
 
 
 
@@ -365,19 +401,19 @@ public class MainController {
 	 *********  II. INTERFACE IN GAME  ************
 	 */
 
-	
 
-	
+
+
 	public void createGame() {
 		createKeyListeners();
 		createGameLoop();
 	}
 
 	public void createKeyListeners() {
-		mainPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
+		gameAnchorPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent arg0) {
+				System.out.println("KEY PRESSED : "+ arg0.getCode());
 				if(arg0.getCode() == KeyCode.Q) {
 					isLeftKeyPressed = true;
 				}else if(arg0.getCode() == KeyCode.D) {
@@ -390,7 +426,7 @@ public class MainController {
 			}
 
 		});
-		mainPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		gameAnchorPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent arg0) {
 				if(arg0.getCode() == KeyCode.Q) {
@@ -407,22 +443,8 @@ public class MainController {
 		});
 	}
 
-	public void moveShip() {
-		//On determine les coodronées du centre de notre cercle :		
-		final double centreX = gamePane.getWidth() / 2; //Coordonnée x
-		final double centreY = gamePane.getHeight() / 2; //Coordonnée y
-		double rayonGame = centreY;	
+	public void moveShip() {	
 
-
-		//test :
-//		System.out.println(rayonShip);
-//		System.out.println(rayonGame);
-//		System.out.println("LEFT "+hasExceededLeft);
-//		System.out.println("RIGHT "+hasExceededRight);
-//		System.out.println("UP "+hasExceededUp);
-//		System.out.println("DOWN "+hasExceededDown);
-		
-		
 		//Si rayon du vaisseau < à rayon du cercle on remet tout à "false" :		
 		if(rayonShip < rayonGame) {
 			hasExceededLeft = false;
@@ -433,18 +455,16 @@ public class MainController {
 
 		//MOVING LEFT
 		if(isLeftKeyPressed && !isRightKeyPressed) {
-			//Rotation pour test :
-			if (angle > -30) {
-				angle -= 5;
-			}
-			shipImg.setRotate(angle);
+
 
 			/*	On verifie si la variable booléenne est false, ce qui veut dire que le vaisseau n'a pas atteint les limites du cercle,
-			*	S'il atteint la limite (en comparant son rayon par rapport à celui du cercle), on met la variable booléenne à true.
-			**/
+			 *	S'il atteint la limite (en comparant son rayon par rapport à celui du cercle), on met la variable booléenne à true.
+			 **/
 			if(!hasExceededLeft) {
-				shipImg.setLayoutX(shipImg.getLayoutX() -distance); //Je fais avancer le vaisseau.
-				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosX(ship.getPosX() -distance);
+				shipImg.setLayoutX(ship.getPosX());
+				//				shipImg.setLayoutX(shipImg.getLayoutX() -distance); //Je fais avancer le vaisseau.
+				rayonShip = Math.sqrt(Math.pow(((shipImg.getLayoutX() + centerShipX) - centreX) , 2) + Math.pow(((shipImg.getLayoutY() + centerShipY) - centreY), 2));
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededLeft = true;
@@ -452,46 +472,27 @@ public class MainController {
 			}
 
 		}
-		
+
 		//MOVING RIGHT
 		if(!isLeftKeyPressed && isRightKeyPressed) {
-			if (angle < 30) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
 
 			if(!hasExceededRight) {
-				shipImg.setLayoutX(shipImg.getLayoutX() + distance);
-				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosX(ship.getPosX() +distance);
+				shipImg.setLayoutX(ship.getPosX());
+				rayonShip = Math.sqrt(Math.pow(((shipImg.getLayoutX() + centerShipX) - centreX) , 2) + Math.pow(((shipImg.getLayoutY() + centerShipY) - centreY), 2));
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededRight = true;
 				}else {distance = 3;}
 			}
 		}
-//		Les deux fonctions suivantes sont à supprimer surrement, car la rotation sera génerée par la souris :
-		if(!isLeftKeyPressed && !isRightKeyPressed) {
-			if(angle > 0) {
-				angle -= 5;
-			}else if(angle < 0) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
-		}
-		if(isLeftKeyPressed && isRightKeyPressed) {
-			if(angle > 0) {
-				angle -= 5;
-			}else if(angle < 0) {
-				angle += 5;
-			}
-			shipImg.setRotate(angle);
-		}
 
 		//MOVING UP
 		if(isUpKeyPressed && !isDownKeyPressed) {
 			if(!hasExceededUp) {
-				shipImg.setLayoutY(shipImg.getLayoutY() -distance);
-				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosY(ship.getPosY() -distance);
+				shipImg.setLayoutY(ship.getPosY());
+				rayonShip = Math.sqrt(Math.pow(((shipImg.getLayoutX() + centerShipX)- centreX) , 2) + Math.pow(((shipImg.getLayoutY() + centerShipY) - centreY), 2));
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededUp = true;
@@ -501,34 +502,104 @@ public class MainController {
 		//MOVING DOWN
 		if(isDownKeyPressed && !isUpKeyPressed) {
 			if(!hasExceededDown) {
-				shipImg.setLayoutY(shipImg.getLayoutY() +distance);
-				rayonShip = Math.sqrt(Math.pow((shipImg.getLayoutX() - centreX) , 2) + Math.pow((shipImg.getLayoutY() - centreY), 2));
+				ship.setPosY(ship.getPosY() +distance);
+				shipImg.setLayoutY(ship.getPosY());
+				rayonShip = Math.sqrt(Math.pow(((shipImg.getLayoutX() + centerShipX) - centreX) , 2) + Math.pow(((shipImg.getLayoutY() + centerShipY) - centreY), 2));
 				if(rayonShip > rayonGame) {
 					distance = 6;
 					hasExceededDown = true;
 				}else {distance = 3;}
 			}	
 		}
-		
-		gamePane.setOnMouseMoved(new EventHandler<MouseEvent>() {
+	}
+	
+	private void rotateShip() {
+		//SET ROTATION
+		gameAnchorPane.setOnMouseMoved(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-			
-				System.out.println(arg0.getX());
-				System.out.println(arg0.getY());
+
+				mouseCoordX = arg0.getX() - (shipImg.getLayoutX() + 333 + centerShipX); //Coordonne du curseur par rapport au vaisseau.
+				mouseCoordY = arg0.getY() - (shipImg.getLayoutY() + 34 + centerShipY); 
+
+				double rayonMouse = Math.sqrt(Math.pow(mouseCoordX,2) + Math.pow(- mouseCoordY, 2)); //Le moins devant le y c'est parceque l'axe des ordonnées sont inversées sur l'interface.
+				double coteOppose = Math.sqrt(Math.pow(mouseCoordX, 2) + Math.pow(- mouseCoordY - rayonMouse, 2)) / 2;
+				double coteHypotenuse = rayonMouse;
+				angle = Math.asin(coteOppose / coteHypotenuse) / Math.PI * 180;
+
+				if(mouseCoordX < 0) {
+					shipImg.setRotate(- (angle * 2));
+				}else {
+					shipImg.setRotate(angle * 2);
+				}
+
 			}
 		});
 	}
+
+
+	private void setMunition() {
+
+		munition.setPosX(ship.getPosX());
+		munition.setPosY(ship.getPosY());
+		
+		munition.setView(new ImageView("/img/laserBlue06.png"));
+		munition.getView().setLayoutX(munition.getPosX() + (shipImg.getFitWidth() / 2));
+		munition.getView().setLayoutY(munition.getPosY() + (shipImg.getFitHeight() / 2));
+		munition.getView().setRotate(shipImg.getRotate());
+		
+		munition.setVelocity(new Point2D(Math.cos(Math.toRadians(shipImg.getRotate()-90)), Math.sin(Math.toRadians(shipImg.getRotate()-90)))
+				.normalize().multiply(6));			
+		
+		gamePane.getChildren().add(munition.getView());
+	}
+
+
+	private void launchMunition() {
+		gameAnchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+			
+			@Override
+			public void handle(MouseEvent arg0) {
+				munition = ship.tirer();
+				
+				if(munition != null) {
+					setMunition();
+					munitions.add(munition);
+				}
+			}
+		});
+		
+		if(munition != null) {
+			for(int i=0; i<munitions.size(); i++) {
+				
+				munitions.get(i).moving();
+				
+				munitions.get(i).getView().setLayoutX(munitions.get(i).getPosX());
+				munitions.get(i).getView().setLayoutY(munitions.get(i).getPosY());
+				
+				rayonMunition = Math.sqrt(Math.pow((munitions.get(i).getPosX() - centreX) , 2) + Math.pow((munitions.get(i).getPosY() - centreY), 2));
+
+				if(rayonMunition > 600) {
+					munitions.remove(i);
+				}
+			}		
+		}
+	}
+
 
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			@Override
 			public void handle(long arg0) {
 				moveShip();
+				rotateShip();
+				launchMunition();
+
 				changeMunitionLabel();
 				changeScoreLabel();
+
 			}
 		};
 		gameTimer.start();
