@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import controler.Debris;
 import controler.Munitions;
 import controler.Partie;
 import controler.Player;
@@ -140,8 +141,8 @@ public class MainController {
 
 	private long lastTimeShot;
 
-	private List<Munitions> munitions = new ArrayList<>();;
-
+	private List<Munitions> munitions = new ArrayList<>();
+	private List<Debris> debris = new ArrayList<>();
 
 
 
@@ -386,6 +387,7 @@ public class MainController {
 			rayonGame = centreY;	
 			
 			setShip();
+//			setDebris();
 			createGame();
 
 			
@@ -397,11 +399,51 @@ public class MainController {
 
 
 
+
 	/**********************************************
 	 *********  II. INTERFACE IN GAME  ************
 	 */
 
-
+	private void setDebris() {
+//		if(Math.random()<0.02) {
+//		Je calcul les coordonees du random, si superieur à circleRayon:
+//			je le met en place
+//			On set le cercle;
+//			On le fait bouger de manière aléatoire;
+	
+		if(Math.random()<0.04) {
+			double x = Math.random() * 1000;
+			double y = Math.random() * 1000;
+			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
+			if(rayonRandom > rayonGame+30) {
+				
+				System.out.println("On EST Là!");
+				Debris unDebri = new Debris(x, y);
+				unDebri.setView(new ImageView("/img/meteorBrown_med1.png"));
+				unDebri.getView().setLayoutX(unDebri.getPosX());
+				unDebri.getView().setLayoutY(unDebri.getPosY());
+//				unDebri.setVelocity(new Point2D(Math.random() * 100, Math.random() * 100)
+//						.normalize().multiply(3));	
+				
+				unDebri.setVelocity(new Point2D(Math.cos(Math.toRadians(Math.random() * 360)), Math.sin(Math.toRadians(Math.random()*360)))
+						.normalize().multiply(4));	
+				
+				System.out.println(unDebri.getVelocity());
+				
+				debris.add(unDebri);
+				gamePane.getChildren().add(unDebri.getView());
+			}	
+		}
+		for(int i=0; i<debris.size(); i++) {
+			debris.get(i).moving();
+			debris.get(i).getView().setLayoutX(debris.get(i).getPosX());
+			debris.get(i).getView().setLayoutY(debris.get(i).getPosY());
+		}
+		if(debris.size()>10) {
+			debris.remove(1);
+			System.out.println(debris.size());
+		}
+	}
 
 
 	public void createGame() {
@@ -589,18 +631,35 @@ public class MainController {
 	}
 
 
+	private void checkIfColision() {
+		for (Munitions munition : munitions) {
+            for (Debris unDebris : debris) {
+                if (munition.impact(unDebris)) {
+                	gamePane.getChildren().removeAll(munition.getView(), unDebris.getView());
+                	
+                	munitions.remove(munition);
+                    debris.remove(unDebris);
+                }
+            }
+        }	
+	}
+	
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			@Override
 			public void handle(long arg0) {
 				moveShip();
 				rotateShip();
+				setDebris();
 				launchMunition();
-
+				checkIfColision();
+				
 				changeMunitionLabel();
 				changeScoreLabel();
+				
 
 			}
+
 		};
 		gameTimer.start();
 	}
