@@ -100,7 +100,7 @@ public class MainController {
 
 	Label munitionLabel;
 	Label scoreLabel;
-	controler.Player playerScore;
+	controler.Player player;
 
 	Partie partie;
 
@@ -143,6 +143,9 @@ public class MainController {
 
 	private List<Munitions> munitions = new ArrayList<>();
 	private List<Debris> debris = new ArrayList<>();
+	
+	private double hp;
+	private int countScore;
 
 
 
@@ -236,17 +239,20 @@ public class MainController {
 	public void setShip() {
 		ship = new Ship();
 
-		shipImg.setFitWidth(99 / 1.4);
-		shipImg.setFitHeight(75 / 1.4);
-		centerShipX = shipImg.getFitWidth() / 2;
-		centerShipY = shipImg.getFitHeight() / 2;
+		ship.setView(shipImg);
+		((ImageView) ship.getView()).setFitWidth(99 / 1.4);
+		((ImageView) ship.getView()).setFitHeight(75 / 1.4);
+		
+		centerShipX = ((ImageView) ship.getView()).getFitWidth() / 2;
+		centerShipY = ((ImageView) ship.getView()).getFitHeight() / 2;
 
 		ship.setPosX((gamePane.getWidth() / 2) - centerShipX);
 		ship.setPosY((gamePane.getWidth() / 2) - centerShipY);
 
-		shipImg.setLayoutX(ship.getPosX());
-		shipImg.setLayoutY(ship.getPosY());
-		gamePane.getChildren().add(shipImg);
+		ship.getView().setLayoutX(ship.getPosX());
+		ship.getView().setLayoutY(ship.getPosY());
+		
+		gamePane.getChildren().add(ship.getView());
 
 	}
 
@@ -256,14 +262,11 @@ public class MainController {
 	 */
 	public void setScoreLabel() {
 		scoreLabel = new Label();
-		int score=1;// à supprimer...
-		scoreLabel.setText("Score : "+score);
+		scoreLabel.setText("Score : "+player.getScore());
 		scoreLabel.setLayoutX(1100);
 		scoreLabel.setLayoutY(40);
 		scoreLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
 		mainPane.getChildren().add(scoreLabel);	
-
-
 	}
 
 	/**
@@ -273,7 +276,7 @@ public class MainController {
 		hpTable = new ImageView[3];
 		int xCoordonnees=0;
 
-		//J'affiche les points d'hp		
+		//J'affiche les points d'hp:	
 		for(int i=0; i<hpTable.length; i++) {
 			hpTable[i] = new ImageView("img/hp.png");
 			hpTable[i].setFitWidth(80);
@@ -288,7 +291,7 @@ public class MainController {
 	/**
 	 * Suppression d'un point de vie :
 	 */
-	public void removeHpLabel() {
+	public void changeHpLabel() {
 		if(hpSize>0) {
 			hpSize--;
 			hpTable[hpSize].setVisible(false);
@@ -333,7 +336,7 @@ public class MainController {
 	}
 
 	public void changeScoreLabel() {
-		scoreLabel.setText("Score : "+String.valueOf(playerScore.getScore()));
+		scoreLabel.setText("Score : "+String.valueOf(player.getScore()));
 	}
 
 
@@ -369,7 +372,7 @@ public class MainController {
 		if(shipImg != null) {
 			//		spaceBackgroundPane.setVisible(false);
 			partie = new controler.Partie();
-			playerScore = new controler.Player();
+			player = new controler.Player();
 
 			startPane.setVisible(false);
 			TranslateTransition transition = new TranslateTransition();
@@ -405,30 +408,19 @@ public class MainController {
 	 */
 
 	private void setDebris() {
-//		if(Math.random()<0.02) {
-//		Je calcul les coordonees du random, si superieur à circleRayon:
-//			je le met en place
-//			On set le cercle;
-//			On le fait bouger de manière aléatoire;
-	
-		if(Math.random()<0.04) {
+		if(Math.random()<0.08) {
 			double x = Math.random() * 1000;
 			double y = Math.random() * 1000;
 			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
 			if(rayonRandom > rayonGame+30) {
 				
-				System.out.println("On EST Là!");
 				Debris unDebri = new Debris(x, y);
 				unDebri.setView(new ImageView("/img/meteorBrown_med1.png"));
 				unDebri.getView().setLayoutX(unDebri.getPosX());
-				unDebri.getView().setLayoutY(unDebri.getPosY());
-//				unDebri.setVelocity(new Point2D(Math.random() * 100, Math.random() * 100)
-//						.normalize().multiply(3));	
+				unDebri.getView().setLayoutY(unDebri.getPosY());	
 				
 				unDebri.setVelocity(new Point2D(Math.cos(Math.toRadians(Math.random() * 360)), Math.sin(Math.toRadians(Math.random()*360)))
 						.normalize().multiply(4));	
-				
-				System.out.println(unDebri.getVelocity());
 				
 				debris.add(unDebri);
 				gamePane.getChildren().add(unDebri.getView());
@@ -439,7 +431,7 @@ public class MainController {
 			debris.get(i).getView().setLayoutX(debris.get(i).getPosX());
 			debris.get(i).getView().setLayoutY(debris.get(i).getPosY());
 		}
-		if(debris.size()>10) {
+		if(debris.size()>7) {
 			debris.remove(1);
 			System.out.println(debris.size());
 		}
@@ -637,8 +629,15 @@ public class MainController {
                 if (munition.impact(unDebris)) {
                 	gamePane.getChildren().removeAll(munition.getView(), unDebris.getView());
                 	
+                	unDebris.onImpact(ship);
+                	
+                	countScore++;
+                	player.setScore(countScore);
+                	changeScoreLabel();
+                	
                 	munitions.remove(munition);
                     debris.remove(unDebris);
+                    
                 }
             }
         }	
@@ -656,6 +655,7 @@ public class MainController {
 				
 				changeMunitionLabel();
 				changeScoreLabel();
+//				changeHpLabel();
 				
 
 			}
