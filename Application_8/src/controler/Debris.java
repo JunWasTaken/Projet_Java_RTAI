@@ -13,6 +13,7 @@ public class Debris extends Objet {
 	public void moving(int posX, int posY) {
 		this.setPosX(this.getPosX()+posX);
 		this.setPosY(this.getPosY()+posY);
+	public void moving(double posX, double posY) {
 	}
 
 	@Override

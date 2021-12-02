@@ -13,7 +13,7 @@ public class AmmoCrate extends Objet {
 		}
 	}
 	
-	public AmmoCrate(int posX, int posY) {
+	public AmmoCrate(double posX, double posY) {
 		super(posX, posY);
 		this.reload = new Munitions[10];
 		for (int i=0; i<10; i++) {
@@ -38,7 +38,7 @@ public class AmmoCrate extends Objet {
 	 * posX reste le même car déplacement uniquement horizontal
 	 * posY est une addition cf grille dans OtherStuff*/
 	@Override
-	public void moving(int posX, int posY) {
+	public void moving(double posX, double posY) {
 		super.setPosX(posX);
 		super.setPosY(super.getPosY()+posY);
 	}
