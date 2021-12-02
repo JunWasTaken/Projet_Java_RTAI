@@ -1,6 +1,7 @@
 package controler;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Ship extends Objet {
 	private int HP;
@@ -60,6 +61,14 @@ public class Ship extends Objet {
 				this.magazine[i] = null;
 				return ammo_tmp;
 			}
+			
+			int randomnb;
+			if (i == 5) {
+				Random random = new Random();
+				randomnb = 2 + random.nextInt(5-2);
+			}
+			
+			
 		}
 		return null;
 	}
