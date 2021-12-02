@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import controler.Debris;
 import controler.Munitions;
@@ -408,7 +409,7 @@ public class MainController {
 	 */
 
 	private void setDebris() {
-		if(Math.random()<0.08) {
+		if(Math.random()<0.06) {
 			double x = Math.random() * 1000;
 			double y = Math.random() * 1000;
 			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
@@ -431,7 +432,7 @@ public class MainController {
 			debris.get(i).getView().setLayoutX(debris.get(i).getPosX());
 			debris.get(i).getView().setLayoutY(debris.get(i).getPosY());
 		}
-		if(debris.size()>7) {
+		if(debris.size()>15) {
 			debris.remove(1);
 			System.out.println(debris.size());
 		}
@@ -624,9 +625,20 @@ public class MainController {
 
 
 	private void checkIfColision() {
+		for	(Debris unDebris : debris){
+			if(ship.impact(unDebris)){
+				gamePane.getChildren().remove(unDebris.getView());
+				
+        		ship.onImpact(unDebris);
+        		changeHpLabel();
+        		
+        		debris.remove(unDebris);
+        	}
+		}
 		for (Munitions munition : munitions) {
             for (Debris unDebris : debris) {
-                if (munition.impact(unDebris)) {
+            	
+                if(munition.impact(unDebris)) {
                 	gamePane.getChildren().removeAll(munition.getView(), unDebris.getView());
                 	
                 	unDebris.onImpact(ship);
@@ -640,8 +652,9 @@ public class MainController {
                     
                 }
             }
-        }	
+        }
 	}
+	
 	
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
@@ -655,7 +668,7 @@ public class MainController {
 				
 				changeMunitionLabel();
 				changeScoreLabel();
-//				changeHpLabel();
+				
 				
 
 			}

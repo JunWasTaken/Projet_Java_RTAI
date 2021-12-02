@@ -62,4 +62,7 @@ public class Ship extends Objet {
 		}
 		return null;
 	}
+	public boolean impact(Debris debris) {
+		return getView().getBoundsInParent().intersects(debris.getView().getBoundsInParent());
+	}
 }
