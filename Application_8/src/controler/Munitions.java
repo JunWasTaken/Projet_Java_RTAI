@@ -32,5 +32,8 @@ public class Munitions extends Objet {
 	public void onImpact(Debris debris) {
 		
 	}
+	public boolean impact(Debris debris) {
+		return getView().getBoundsInParent().intersects(debris.getView().getBoundsInParent());
+	}
 
 }
