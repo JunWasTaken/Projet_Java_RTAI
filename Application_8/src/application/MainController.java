@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 import controler.Debris;
 import controler.Munitions;
@@ -453,7 +453,8 @@ public class MainController {
 			setScoreLabel();
 			setHpLabel();		
 			setMunitionsLabel();
-			setTimeLabel();	
+			setTimeLabel();
+			setTempLabel();
 
 			centreX = gamePane.getWidth() / 2; //Coordonn�e x du point central
 			centreY = gamePane.getHeight() / 2; //Coordonn�e y

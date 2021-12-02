@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Ship extends Objet {
 	private int HP;
-	private double HP;
+	private double hP;
 	private Munitions[] magazine;
 	
 	public Ship() {
@@ -18,7 +18,7 @@ public class Ship extends Objet {
 		return HP;
 	}
 	public void setHP(double hP) {
-		HP = hP;
+		hP = HP;
 	}
 	public Munitions[] getChargeur() {
 		return magazine;
@@ -54,8 +54,7 @@ public class Ship extends Objet {
 	
 	public Munitions tirer() {
 		Munitions ammo_tmp;
-		for (int i=9; i>=0; i++) {
-		for (int i=9; i>=0; i--) {
+		for (int i=0; i>=0; i++) {
 			if (this.magazine[i] != null) {
 				ammo_tmp = this.magazine[i];
 				this.magazine[i] = null;
