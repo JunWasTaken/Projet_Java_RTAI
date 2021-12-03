@@ -218,8 +218,15 @@ public class MainController {
 		homePane.setVisible(false);
 		gameOverPane.setVisible(true);
 	}
-	
-
+	public void setHomePane(){
+		
+		gameOverPane.setVisible(false);
+		homePane.setVisible(true);
+	}
+	public void setStartPane2() {
+		gameOverPane.setVisible(false);
+		startPane.setVisible(true);
+	}
 
 	/* 
 	 * Mise en place du bouton radio :
