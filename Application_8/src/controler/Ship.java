@@ -36,14 +36,13 @@ public class Ship extends Objet {
 		super.setPosX(super.getPosX()+posX);
 		super.setPosY(super.getPosY()+posY);
 	}
-
-	@Override
-	public void onImpact(Ship joueur) {
-		//rien � mettre dans cette fonction
-	}
 	
 	public void onImpact(Debris debris) {
 		this.setHP(this.getHP()-1);
+	}
+	
+	public void onImpact(AmmoBox ammoBox) {
+		this.getChargeur();
 	}
 	
 	public boolean estDetruit() {
@@ -63,7 +62,18 @@ public class Ship extends Objet {
 		}
 		return null;
 	}
-	public boolean impact(Debris debris) {
-		return getView().getBoundsInParent().intersects(debris.getView().getBoundsInParent());
+	public boolean impact(Debris unDebris) {
+		return getView().getBoundsInParent().intersects(unDebris.getView().getBoundsInParent());
+	}
+
+	public boolean impact(AmmoBox uneAmmoBox) {
+		// TODO Auto-generated method stub
+		return getView().getBoundsInParent().intersects(uneAmmoBox.getView().getBoundsInParent());
+	}
+
+	@Override
+	public void onImpact(Ship joueur) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import controler.AmmoBox;
 import controler.Debris;
 import controler.Munitions;
 import controler.Partie;
@@ -166,6 +167,7 @@ public class MainController {
 
 	private List<Munitions> munitions = new ArrayList<>();
 	private List<Debris> debris = new ArrayList<>();
+	private List<AmmoBox> ammoBox = new ArrayList<>();
 	
 	private double hp;
 	private int countScore;
@@ -513,6 +515,7 @@ public class MainController {
 		deleteShip();
 		deleteMunition();
 		deleteDebris();
+		deleteLaunchMunition();
 
 	}
 
@@ -525,8 +528,38 @@ public class MainController {
 	 *********  II. INTERFACE IN GAME  ************
 	 */
 
+	private void setAmmoBox() {
+		if(Math.random()<0.03) {
+			double x = Math.random() * 1000;
+			double y = Math.random() * 1000;
+			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
+			if(rayonRandom > rayonGame+30) {
+				
+				AmmoBox uneAmmoBox = new AmmoBox(x, y);
+				uneAmmoBox.setView(new ImageView("/img/ammunition_box.png"));
+				uneAmmoBox.getView().setLayoutX(uneAmmoBox.getPosX());
+				uneAmmoBox.getView().setLayoutY(uneAmmoBox.getPosY());	
+				
+				uneAmmoBox.setVelocity(new Point2D(Math.cos(Math.toRadians(Math.random() * 360)), Math.sin(Math.toRadians(Math.random()*360)))
+						.normalize().multiply(4));	
+				
+				ammoBox.add(uneAmmoBox);
+				gamePane.getChildren().add(uneAmmoBox.getView());
+			}	
+		}
+		for(int i=0; i<ammoBox.size(); i++) {
+			ammoBox.get(i).moving();
+			ammoBox.get(i).getView().setLayoutX(ammoBox.get(i).getPosX());
+			ammoBox.get(i).getView().setLayoutY(ammoBox.get(i).getPosY());
+		}
+		if(ammoBox.size()>15) {
+			ammoBox.remove(1);
+			System.out.println(ammoBox.size());
+		}
+	}	
+	
 	private void setDebris() {
-		if(Math.random()<0.06) {
+		if(Math.random()<0.09) {
 			double x = Math.random() * 1000;
 			double y = Math.random() * 1000;
 			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
@@ -724,6 +757,7 @@ public class MainController {
 	private void deleteMunition() {
 
 		gamePane.getChildren().clear();
+		munitions.clear();
 		
 	}
 
@@ -758,7 +792,12 @@ public class MainController {
 			}		
 		}
 	}
-
+	
+	private void deleteLaunchMunition() {
+	
+		munitions.clear();
+		
+	}
 
 	private void checkIfColision() {
 		for	(Debris unDebris : debris){
@@ -789,6 +828,16 @@ public class MainController {
                 }
             }
         }
+		for	(AmmoBox uneAmmoBox : ammoBox){
+			if(ship.impact(uneAmmoBox)){
+				gamePane.getChildren().remove(uneAmmoBox.getView());
+				
+        		ship.onImpact(uneAmmoBox);
+        		ship.getChargeur();
+        		
+        		ammoBox.remove(uneAmmoBox);
+        	}
+		}
 	}
 	
 	
@@ -801,7 +850,7 @@ public class MainController {
 				setDebris();
 				launchMunition();
 				checkIfColision();
-				
+				setAmmoBox();
 				changeMunitionLabel();
 				changeScoreLabel();
 				
