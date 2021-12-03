@@ -19,7 +19,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setResizable(false);
-//			primaryStage.setFullScreen(false);
+//			primaryStage.setFullScreen(true);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

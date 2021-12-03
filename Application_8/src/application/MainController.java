@@ -283,6 +283,12 @@ public class MainController {
 		gamePane.getChildren().add(ship.getView());
 
 	}
+	
+	public void deleteShip() {
+		
+		gamePane.getChildren().clear();
+
+	}
 
 
 	/**
@@ -297,10 +303,15 @@ public class MainController {
 		mainPane.getChildren().add(scoreLabel);	
 	}
 	
+	public void deleteScoreLabel() {
+		mainPane.getChildren().clear();	
+	}
+	
 	/**
 	 * Affichage du label "temp" :
 	 */
 	private static int m2, m1, s2, s1;
+	private static String tempScore;
 	public void setTempLabel() {		
 	       
 		Label timeLabel = new Label();
@@ -332,10 +343,24 @@ public class MainController {
 				}
 
 				Platform.runLater (() -> timeLabel.setText(m2 + "" + m1 + ":" + s2 + "" + s1));
+				tempScore = timeLabel.getText();
 				
 			}
 			
 		}, 1000, 1000);
+		
+	}
+	
+	public void deleteTempLabel() {		
+	       
+		mainPane.getChildren().clear();
+		
+	}
+	
+	private static String tempScoreDef;
+	public void stopTempLabel() {		
+	       
+		tempScoreDef = tempScore;
 		
 	}
 
@@ -366,6 +391,9 @@ public class MainController {
 			hpSize--;
 			hpTable[hpSize].setVisible(false);
 		}
+		if(hpSize==0) {
+			gameOver();
+		}
 	}
 
 	/**
@@ -386,6 +414,11 @@ public class MainController {
 		munitionLabel.setLayoutY(674);
 		munitionLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
 		mainPane.getChildren().add(munitionLabel);	
+	}
+	
+	public void deleteMunitionsLabel() {
+
+		mainPane.getChildren().clear();	
 	}
 
 	public void setTimeLabel() {
@@ -438,6 +471,7 @@ public class MainController {
 	/**
 	 * 
 	 */
+	private static TranslateTransition transition = new TranslateTransition();
 	public void play() {
 		if(shipImg != null) {
 			//		spaceBackgroundPane.setVisible(false);
@@ -445,7 +479,6 @@ public class MainController {
 			player = new controler.Player();
 
 			startPane.setVisible(false);
-			TranslateTransition transition = new TranslateTransition();
 			transition.setDuration(Duration.seconds(0.4));
 			transition.setNode(logo);
 			transition.setByX(-1000);
@@ -455,7 +488,7 @@ public class MainController {
 			setMunitionsLabel();
 			setTimeLabel();
 			setTempLabel();
-
+			
 			centreX = gamePane.getWidth() / 2; //Coordonn�e x du point central
 			centreY = gamePane.getHeight() / 2; //Coordonn�e y
 			rayonGame = centreY;	
@@ -466,6 +499,20 @@ public class MainController {
 
 			
 		}
+
+	}
+	
+	public void gameOver() {
+		gameOverPane.setVisible(true);
+		
+		deleteScoreLabel();		
+		deleteMunitionsLabel();
+		deleteTempLabel();
+		stopTempLabel();	
+		gameTimer.stop();
+		deleteShip();
+		deleteMunition();
+		deleteDebris();
 
 	}
 
@@ -507,7 +554,12 @@ public class MainController {
 			System.out.println(debris.size());
 		}
 	}
-
+	
+	private void deleteDebris() {
+				
+		gamePane.getChildren().clear();
+		
+	}
 
 	public void createGame() {
 		createKeyListeners();
@@ -667,6 +719,12 @@ public class MainController {
 				.normalize().multiply(6));			
 		
 		gamePane.getChildren().add(munition.getView());
+	}
+	
+	private void deleteMunition() {
+
+		gamePane.getChildren().clear();
+		
 	}
 
 
