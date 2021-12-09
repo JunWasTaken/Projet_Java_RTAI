@@ -47,5 +47,9 @@ public class AmmoCrate extends Objet {
 	public void onImpact(Ship joueur) {
 		joueur.setChargeur(this.reload);
 	}
+	
+	public boolean impact(Ship ship) {
+		return getView().getBoundsInParent().intersects(ship.getView().getBoundsInParent());
+	}
 
 }

@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-
-
+import controler.AmmoCrate;
 import controler.Debris;
 import controler.Munitions;
 import controler.Partie;
@@ -100,7 +101,7 @@ public class MainController {
 	Button playButton;
 	@FXML
 	Button themeButton;
-	
+
 	@FXML
 	Pane gameOverPane;
 	@FXML
@@ -166,7 +167,7 @@ public class MainController {
 
 	private List<Munitions> munitions = new ArrayList<>();
 	private List<Debris> debris = new ArrayList<>();
-	
+	private List<AmmoCrate> ammocrates = new ArrayList<>();
 	private double hp;
 	private int countScore;
 
@@ -216,7 +217,7 @@ public class MainController {
 		homePane.setVisible(false);
 		gameOverPane.setVisible(true);
 	}
-	
+
 
 
 	/* 
@@ -270,7 +271,7 @@ public class MainController {
 		ship.setView(shipImg);
 		((ImageView) ship.getView()).setFitWidth(99 / 1.4);
 		((ImageView) ship.getView()).setFitHeight(75 / 1.4);
-		
+
 		centerShipX = ((ImageView) ship.getView()).getFitWidth() / 2;
 		centerShipY = ((ImageView) ship.getView()).getFitHeight() / 2;
 
@@ -279,7 +280,7 @@ public class MainController {
 
 		ship.getView().setLayoutX(ship.getPosX());
 		ship.getView().setLayoutY(ship.getPosY());
-		
+
 		gamePane.getChildren().add(ship.getView());
 
 	}
@@ -296,13 +297,13 @@ public class MainController {
 		scoreLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 40));
 		mainPane.getChildren().add(scoreLabel);	
 	}
-	
+
 	/**
 	 * Affichage du label "temp" :
 	 */
 	private static int m2, m1, s2, s1;
 	public void setTempLabel() {		
-	       
+
 		Label timeLabel = new Label();
 		timeLabel.setText("00:00");
 		timeLabel.setLayoutX(1125);
@@ -310,13 +311,12 @@ public class MainController {
 		timeLabel.setFont(Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 50));
 		mainPane.getChildren().add(timeLabel); //A finir
 		m2 = 0; m1 = 0; s2 = 0; s1 = 0;	
-		
+
 		Timer chrono = new Timer();
 		chrono.schedule(new TimerTask() {
-			
-			@Override
+
 			public void run() {
-				
+
 				s1++;
 				if(s1 == 10) {
 					s1 = 0;
@@ -332,11 +332,11 @@ public class MainController {
 				}
 
 				Platform.runLater (() -> timeLabel.setText(m2 + "" + m1 + ":" + s2 + "" + s1));
-				
+
 			}
-			
+
 		}, 1000, 1000);
-		
+
 	}
 
 	/**
@@ -454,16 +454,17 @@ public class MainController {
 			setHpLabel();		
 			setMunitionsLabel();
 			setTimeLabel();	
+			setTempLabel();
 
 			centreX = gamePane.getWidth() / 2; //Coordonn�e x du point central
 			centreY = gamePane.getHeight() / 2; //Coordonn�e y
 			rayonGame = centreY;	
-			
+
 			setShip();
-//			setDebris();
+			//			setDebris();
 			createGame();
 
-			
+
 		}
 
 	}
@@ -483,15 +484,15 @@ public class MainController {
 			double y = Math.random() * 1000;
 			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
 			if(rayonRandom > rayonGame+30) {
-				
+
 				Debris unDebri = new Debris(x, y);
 				unDebri.setView(new ImageView("/img/meteorBrown_med1.png"));
 				unDebri.getView().setLayoutX(unDebri.getPosX());
 				unDebri.getView().setLayoutY(unDebri.getPosY());	
-				
+
 				unDebri.setVelocity(new Point2D(Math.cos(Math.toRadians(Math.random() * 360)), Math.sin(Math.toRadians(Math.random()*360)))
 						.normalize().multiply(4));	
-				
+
 				debris.add(unDebri);
 				gamePane.getChildren().add(unDebri.getView());
 			}	
@@ -503,8 +504,34 @@ public class MainController {
 		}
 		if(debris.size()>15) {
 			debris.remove(1);
-			System.out.println(debris.size());
+			gamePane.getChildren().remove(debris.get(1).getView());
+			System.out.println("debris Size : "+debris.size());
 		}
+	}
+
+	private void setAmmocrate() {
+		if(Math.random()<0.002) {
+
+			int x = (int) (Math.random() * ((700) + 1));
+			int y = (int) (Math.random() * ((700) + 1));
+			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
+
+			if(rayonRandom < rayonGame) {
+				AmmoCrate ammocrate = new AmmoCrate(x, y);
+				ammocrate.setView(new ImageView("/img/star_gold.png"));
+				ammocrate.getView().setLayoutX(ammocrate.getPosX());
+				ammocrate.getView().setLayoutY(ammocrate.getPosY());	
+
+				ammocrates.add(ammocrate);
+
+				gamePane.getChildren().add(ammocrate.getView());
+			}
+			if(ammocrates .size()>5) {
+				debris.remove(1);
+				gamePane.getChildren().remove(ammocrates.get(1).getView());
+			}
+		}
+
 	}
 
 
@@ -625,7 +652,7 @@ public class MainController {
 		}
 
 	}
-	
+
 	private void rotateShip() {
 		//SET ROTATION
 		gameAnchorPane.setOnMouseMoved(new EventHandler<MouseEvent>() {
@@ -656,48 +683,48 @@ public class MainController {
 
 		munition.setPosX(ship.getPosX());
 		munition.setPosY(ship.getPosY());
-		
+
 		munition.setView(new ImageView("/img/laserBlue06.png"));
 		munition.getView().setLayoutX(munition.getPosX() + (shipImg.getFitWidth() / 2));
 		munition.getView().setLayoutY(munition.getPosY() + (shipImg.getFitHeight() / 2));
 		munition.getView().setRotate(shipImg.getRotate());
-		
+
 		munition.setVelocity(new Point2D(Math.cos(Math.toRadians(shipImg.getRotate()-90)), Math.sin(Math.toRadians(shipImg.getRotate()-90)))
 				.normalize().multiply(6));			
-		
+
 		gamePane.getChildren().add(munition.getView());
 	}
 
 
 	private void launchMunition() {
 		gameAnchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-			
+
 			@Override
 			public void handle(MouseEvent arg0) {
 				munition = ship.tirer();
-				
+
 				if(munition != null) {
 					setMunition();
 					munitions.add(munition);
 				}
 			}
 		});
-		
-		if(munition != null) {
-			for(int i=0; i<munitions.size(); i++) {
-				
-				munitions.get(i).moving();
-				
-				munitions.get(i).getView().setLayoutX(munitions.get(i).getPosX());
-				munitions.get(i).getView().setLayoutY(munitions.get(i).getPosY());
-				
-				rayonMunition = Math.sqrt(Math.pow((munitions.get(i).getPosX() - centreX) , 2) + Math.pow((munitions.get(i).getPosY() - centreY), 2));
 
-				if(rayonMunition > 600) {
-					munitions.remove(i);
-				}
-			}		
-		}
+
+		for(int i=0; i<munitions.size(); i++) {
+
+			munitions.get(i).moving();
+
+			munitions.get(i).getView().setLayoutX(munitions.get(i).getPosX());
+			munitions.get(i).getView().setLayoutY(munitions.get(i).getPosY());
+
+			rayonMunition = Math.sqrt(Math.pow((munitions.get(i).getPosX() - centreX) , 2) + Math.pow((munitions.get(i).getPosY() - centreY), 2));
+
+			if(rayonMunition > 600) {
+				munitions.remove(i);
+			}
+		}		
+
 	}
 
 
@@ -705,34 +732,44 @@ public class MainController {
 		for	(Debris unDebris : debris){
 			if(ship.impact(unDebris)){
 				gamePane.getChildren().remove(unDebris.getView());
-				
-        		ship.onImpact(unDebris);
-        		changeHpLabel();
-        		
-        		debris.remove(unDebris);
-        	}
+
+				ship.onImpact(unDebris);
+				changeHpLabel();
+
+				debris.remove(unDebris);
+			}
+		}
+		for(AmmoCrate ammocrate : ammocrates) {
+			if(ship.impact(ammocrate)){
+				gamePane.getChildren().remove(ammocrate.getView());
+
+				ammocrate.onImpact(ship);
+
+				ammocrates.remove(ammocrate);
+			}
 		}
 		for (Munitions munition : munitions) {
-            for (Debris unDebris : debris) {
-            	
-                if(munition.impact(unDebris)) {
-                	gamePane.getChildren().removeAll(munition.getView(), unDebris.getView());
-                	
-                	unDebris.onImpact(ship);
-                	
-                	countScore++;
-                	player.setScore(countScore);
-                	changeScoreLabel();
-                	
-                	munitions.remove(munition);
-                    debris.remove(unDebris);
-                    
-                }
-            }
-        }
+			for (Debris unDebris : debris) {
+
+				if(munition.impact(unDebris)) {
+					gamePane.getChildren().removeAll(munition.getView(), unDebris.getView());
+
+					unDebris.onImpact(ship);
+
+					countScore++;
+					player.setScore(countScore);
+					changeScoreLabel();
+
+					munitions.remove(munition);
+					debris.remove(unDebris);
+
+				}
+
+
+			}
+		}
 	}
-	
-	
+
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			@Override
@@ -740,15 +777,16 @@ public class MainController {
 				moveShip();
 				rotateShip();
 				setDebris();
+				setAmmocrate();
 				launchMunition();
 				checkIfColision();
-				
+
 				changeMunitionLabel();
 				changeScoreLabel();
-				
-				
 
 			}
+
+
 
 		};
 		gameTimer.start();

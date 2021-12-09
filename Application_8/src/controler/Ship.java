@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class Ship extends Objet {
 	private int HP;
-	private double HP;
 	private Munitions[] magazine;
 	
 	public Ship() {
@@ -14,10 +13,10 @@ public class Ship extends Objet {
 		this.magazine = new AmmoCrate().getReload();
 	}
 
-	public double getHP() {
+	public int getHP() {
 		return HP;
 	}
-	public void setHP(double hP) {
+	public void setHP(int hP) {
 		HP = hP;
 	}
 	public Munitions[] getChargeur() {
@@ -54,7 +53,6 @@ public class Ship extends Objet {
 	
 	public Munitions tirer() {
 		Munitions ammo_tmp;
-		for (int i=9; i>=0; i++) {
 		for (int i=9; i>=0; i--) {
 			if (this.magazine[i] != null) {
 				ammo_tmp = this.magazine[i];
@@ -64,7 +62,11 @@ public class Ship extends Objet {
 		}
 		return null;
 	}
+	
 	public boolean impact(Debris debris) {
 		return getView().getBoundsInParent().intersects(debris.getView().getBoundsInParent());
+	}
+	public boolean impact(AmmoCrate ammocrate) {
+		return getView().getBoundsInParent().intersects(ammocrate.getView().getBoundsInParent());
 	}
 }

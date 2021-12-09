@@ -28,7 +28,7 @@ public class Partie {
 	}
 	
 	public void play() {
-		
+		status = Status.LAUNCHE;
 	}
 	public void sauvegarde() {
 		
@@ -37,16 +37,16 @@ public class Partie {
 	public void createNewGame() {
 		status = Status.LAUNCHE;
 		setDifficulty();
-		playArea = new PlayArea();
 	}
 
 	//Status
-
+	public Status getStatus() {
+		return status;
+	}
+	
 	public void changeStatus(Status status) {
 		this.status = status;	
 	}
-	
-	
 	
 	//DIFFICULTY
 	public void setDifficulty() {
