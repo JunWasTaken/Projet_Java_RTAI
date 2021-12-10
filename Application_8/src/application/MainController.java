@@ -666,7 +666,7 @@ public class MainController {
 				double rayonMouse = Math.sqrt(Math.pow(mouseCoordX,2) + Math.pow(- mouseCoordY, 2)); //Le moins devant le y c'est parceque l'axe des ordonn�es sont invers�es sur l'interface.
 				double coteOppose = Math.sqrt(Math.pow(mouseCoordX, 2) + Math.pow(- mouseCoordY - rayonMouse, 2)) / 2;
 				double coteHypotenuse = rayonMouse;
-				angle = Math.asin(coteOppose / coteHypotenuse) / Math.PI * 180;
+				angle = Math.toDegrees(Math.asin(coteOppose / coteHypotenuse));
 
 				if(mouseCoordX < 0) {
 					shipImg.setRotate(- (angle * 2));
