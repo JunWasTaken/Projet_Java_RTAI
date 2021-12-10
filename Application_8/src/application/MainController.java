@@ -537,7 +537,7 @@ public class MainController {
 	 */
 
 	private void setAmmoBox() {
-		if(Math.random()<0.03) {
+		if(Math.random()<0.02) {
 			double x = Math.random() * 1000;
 			double y = Math.random() * 1000;
 			double rayonRandom = Math.sqrt(Math.pow((x - centreX) , 2) + Math.pow((y - centreY), 2));
