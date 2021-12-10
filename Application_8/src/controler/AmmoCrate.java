@@ -1,6 +1,13 @@
 package controler;
 
 import java.util.Arrays;
+/**
+ * Ancienne classe gérant les déplacements des boîtes de munitions
+ * @see AmmoBox
+ * @deprecated
+ * @author Alexandra Denos
+ *
+ */
 
 public class AmmoCrate extends Objet {
 	private Munitions[] reload;
@@ -34,8 +41,8 @@ public class AmmoCrate extends Objet {
 	}
 
 	/*
-	 * fonction de dÃ©placement des ammoCrates
-	 * posX reste le mÃªme car dÃ©placement uniquement horizontal
+	 * fonction de déplacement des ammoCrates
+	 * posX reste le mÃªme car déplacement uniquement horizontal
 	 * posY est une addition cf grille dans OtherStuff*/
 	@Override
 	public void moving(double posX, double posY) {
@@ -43,6 +50,9 @@ public class AmmoCrate extends Objet {
 		super.setPosY(super.getPosY()+posY);
 	}
 
+	/**
+	 * remplit le tableau reload de cette classe avec 10 objets de type Munitions
+	 */
 	@Override
 	public void onImpact(Ship joueur) {
 		joueur.setChargeur(this.reload);
