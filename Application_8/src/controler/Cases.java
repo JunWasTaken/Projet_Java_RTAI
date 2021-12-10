@@ -1,5 +1,10 @@
 package controler;
 
+/**
+ * @deprecated
+ * @author alexandra
+ *
+ */
 public class Cases {
 
 	public Cases() {
